@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <link
+      rel="shortcut icon"
+      href="./images/hourglass.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main id="main">
+      <span class="material-icons" id="dark-mode-btn"> lightbulb </span>
+      <div id="timer-container">
+        <div id="watch">
+          <div id="timer">
+            <input type="text" pattern="[0-9]{1,2}" maxlength="2" placeholder="00" class="timer-input hours"> 
+            <span class="colon">
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </span>
+            <input type="text" pattern="([00]||[0-9]|[1-5][0-9])" maxlength="2" placeholder="00" class="timer-input minutes"> 
+            <span class="colon">
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </span>
+            <input type="text" pattern="([00]||[0-9]|[1-5][0-9])" maxlength="2" placeholder="00" class="timer-input seconds"> 
+          </div>
+        </div>
+        <div id="buttons">
+          <span id="play-pause" class="button material-icons">
+            play_arrow
+          </span>
+          <span id="reset" class="button material-icons"> refresh </span>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <a href="https://www.flaticon.com/free-icons/timer" title="timer icons">Timer icons created by Flat Icons - Flaticon</a>
+    </footer>
+    <script src="./app.js"></script>
+  </body>
+</html>
