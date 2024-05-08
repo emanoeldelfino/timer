@@ -62,9 +62,12 @@ body {
   font-size: 35px;
 }
 
-footer {
+footer.credits {
   position: fixed;
+  display: flex;
+  flex-direction: column;
   bottom: 0;
+  gap: 5px;
   width: 100vw;
   height: 75px;
   background: var(--background);
@@ -82,6 +85,11 @@ footer a {
   color: var(--foreground);
   text-decoration: none;
   text-align: center;
+  color: gray;
+}
+
+footer a:hover {
+  filter: brightness(.75);
 }
 
 #timer-container, #watch {
