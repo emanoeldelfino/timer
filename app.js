@@ -67,7 +67,7 @@ reset.addEventListener("click", () => {
   hours.value = "";
   minutes.value = "";
   seconds.value = "";
-  title.value = "Timer";
+  title.innerText = "Timer";
 
   if ((playPause.innerText = "pause")) {
     playPause.innerText = toggleText(playPause, "play_arrow", "pause");
