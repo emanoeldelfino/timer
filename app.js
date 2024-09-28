@@ -1,8 +1,8 @@
-const playPause = document.querySelector("#play-pause");
+const playPauseBtn = document.querySelector("#play-pause");
 const darkModeBtn = document.querySelector("#dark-mode-btn");
-const r = document.querySelector(":root");
+const rootElem = document.querySelector(":root");
 const timer = document.querySelector("#timer");
-const reset = document.querySelector("#reset");
+const resetBtn = document.querySelector("#reset");
 const title = document.querySelector("title");
 const hours = document.querySelector(".hours");
 const minutes = document.querySelector(".minutes");
@@ -10,8 +10,18 @@ const seconds = document.querySelector(".seconds");
 const inputs = document.querySelectorAll(".timer-input");
 const bellSoundEffect = new Audio('./sounds/bell.mp3');
 
-let previousTime,
-  elapsedTime = 0;
+window.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme");
+
+  console.log(savedTheme)
+
+  if (savedTheme === "light")
+    setLightMode();
+});
+
+let previousTime, elapsedTime = 0;
+
+let timerInterval;
 
 inputs.forEach((elem) => {
   elem.addEventListener("input", (event) => {
@@ -21,28 +31,43 @@ inputs.forEach((elem) => {
   });
 });
 
-darkModeBtn.addEventListener("click", () => {
-  darkModeBtn.innerText = toggleText(darkModeBtn, "dark_mode", "lightbulb");
-  let bg, fg;
-  [bg, fg] =
-    darkModeBtn.innerText === "lightbulb"
-      ? ["black", "white"]
-      : ["white", "black"];
-  r.style.setProperty("--background", bg);
-  r.style.setProperty("--foreground", fg);
-});
+darkModeBtn.addEventListener("click", darkModeFn);
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === " ") {
-    playPause.click();
-  } else {
-    e.key.toUpperCase() === "R" && reset.click();
-  }
+  if (e.key === " ")
+    playPause();
+  else if (e.key.toUpperCase() === "R")
+    reset();
 });
 
-playPause.addEventListener("click", () => {
-  playPause.innerText = toggleText(playPause, "play_arrow", "pause");
-  if (playPause.innerText === "pause") { 
+playPauseBtn.addEventListener("click", playPause);
+
+resetBtn.addEventListener("click", reset);
+
+function darkModeFn() {
+  if (darkModeBtn.innerText === "lightbulb")
+    setLightMode();
+  else
+    setDarkMode();
+}
+
+function setDarkMode() {
+  localStorage.setItem("theme", "dark");
+  rootElem.style.setProperty("--background", "black");
+  rootElem.style.setProperty("--foreground", "white");
+  darkModeBtn.innerText = "lightbulb";
+}
+
+function setLightMode() {
+  localStorage.setItem("theme", "light");
+  rootElem.style.setProperty("--background", "white");
+  rootElem.style.setProperty("--foreground", "black");
+  darkModeBtn.innerText = "dark_mode";
+}
+
+function playPause() {
+  playPauseBtn.innerText = playPauseBtn.innerText === "play_arrow" ? "pause" : "play_arrow";
+  if (playPauseBtn.innerText === "pause") { 
     inputs.forEach(input => {
       input.readOnly = true;
     });
@@ -61,44 +86,22 @@ playPause.addEventListener("click", () => {
   } else {
     clear();
   }
-});
+}
 
-reset.addEventListener("click", () => {
+function reset() {
   hours.value = "";
   minutes.value = "";
   seconds.value = "";
   title.innerText = "Timer";
-
-  if ((playPause.innerText = "pause")) {
-    playPause.innerText = toggleText(playPause, "play_arrow", "pause");
-    clear();
-  }
-});
+  playPauseBtn.innerText = "play_arrow";
+  clear();
+}
 
 function clear() {
   clearInterval(timerInterval);
   inputs.forEach(input => {
     input.readOnly = false;
   });
-}
-
-function toggleText(elem, ...args) {
-  const elemText = elem.innerText;
-
-  if (args.includes(elemText) && !hasDuplicates(args)) {
-    let replaceText = "";
-    if (args.indexOf(elemText) < args.length - 1) {
-      replaceText = args[args.indexOf(elemText) + 1];
-    } else {
-      replaceText = args[0];
-    }
-
-    return replaceText;
-  } else {
-    throw new Error(
-      "Invalid arguments after elem. It doesn't include the text of element or it has duplicates."
-    );
-  }
 }
 
 function decreaseOneSecondTimer() {
@@ -129,7 +132,7 @@ function decreaseOneSecondTimer() {
   title.innerText = `${hours.value}:${minutes.value}:${seconds.value}`;
 
   if (hoursValue === minutesValue && minutesValue === secondsValue && secondsValue === 0) {
-    clear();
+    reset();
     bellSoundEffect.play();
     return;
   }
